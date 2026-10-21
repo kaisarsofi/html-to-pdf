@@ -4,6 +4,31 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] — 2026-10-21
+
+### Changed
+
+- **`page.mode` now defaults to `'paginated'` instead of `'continuous'`.** A no-config
+  `downloadPdf(element)` produces regular A4 pages, with a 36pt margin, broken where no line,
+  row, image or card is crossing. Most people reaching for an HTML-to-PDF library want a
+  document that prints and attaches like every other PDF, and the old default surprised them
+  with a single page metres long.
+
+  To keep the previous behaviour, ask for it:
+
+  ```ts
+  await downloadPdf(element, 'doc.pdf', { page: { mode: 'continuous' } });
+  ```
+
+  `'continuous'` still defaults its margin to 0, since a margin around a page made exactly as
+  tall as the document reads as a border rather than page padding.
+
+### Docs
+
+- README rewritten to lead with a hero demo, one-paragraph description and the two-line
+  integration, with reference material linked rather than inlined.
+- New demo media generated from real output: `hero.gif` and `modes.gif`.
+
 ## [0.3.4] — 2026-10-21
 
 First public release, published as `@kaisarsofi/html-to-pdf`.
@@ -77,4 +102,5 @@ land where nothing is crossing them.
 - 71 tests covering layout extraction, page breaking, pagination, colour parsing, SVG paths
   and config resolution, run on Node 18, 20 and 22.
 
+[0.4.0]: https://github.com/kaisarsofi/html-to-pdf/releases/tag/v0.4.0
 [0.3.4]: https://github.com/kaisarsofi/html-to-pdf/releases/tag/v0.3.4

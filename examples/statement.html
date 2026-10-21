@@ -87,8 +87,8 @@
 </head>
 <body>
   <div class="bar">
-    <button id="single">Download — one long page</button>
-    <button id="paged" class="ghost">Download — A4 pages</button>
+    <button id="paged">Download — A4 pages</button>
+    <button id="single" class="ghost">Download — one long page</button>
     <span id="status"></span>
     <a href="./">&larr; All examples</a>
   </div>
@@ -214,9 +214,9 @@
         status.textContent = `${label}: ${r.pageCount} page${r.pageCount === 1 ? '' : 's'} · ${(r.bytes.length / 1024).toFixed(0)} KB`;
       } catch (e) { status.textContent = 'Failed: ' + e.message; console.error(e); }
     };
-    // Default: one page exactly as long as the document.
-    document.getElementById('single').onclick = () => run('One page', {});
-    document.getElementById('paged').onclick  = () => run('A4', { page: { mode: 'paginated', size: 'A4', margin: 30 } });
+    // A4 pages are the default, so the first button passes no config at all.
+    document.getElementById('paged').onclick  = () => run('A4', {});
+    document.getElementById('single').onclick = () => run('One page', { page: { mode: 'continuous' } });
   </script>
 </body>
 </html>

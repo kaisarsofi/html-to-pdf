@@ -5,11 +5,26 @@ import { resolveConfig, RENDER_DEFAULTS } from "../dist/config.js";
 import { unicodeRangeCovers } from "../dist/core/font-registry.js";
 import { createRegistry } from "../dist/fonts/runtime.js";
 
+test("opting into one continuous page drops the page margin to zero", () => {
+  // 'continuous' makes the page exactly as tall as the document, so a margin
+  // would show up as a border around the whole thing rather than page padding.
+  const c = resolveConfig({ page: { mode: "continuous" } });
+  assert.equal(c.page.mode, "continuous");
+  assert.deepEqual(c.page.margin, { top: 0, bottom: 0, left: 0 });
+});
+
+test("an explicit margin wins over whatever the mode would default to", () => {
+  assert.deepEqual(resolveConfig({ page: { mode: "continuous", margin: 24 } }).page.margin,
+    { top: 24, bottom: 24, left: 24 });
+  assert.deepEqual(resolveConfig({ page: { margin: 0 } }).page.margin,
+    { top: 0, bottom: 0, left: 0 });
+});
+
 test("no config at all gives the zero-setup defaults", () => {
   const c = resolveConfig();
   assert.equal(c.layout, "preserve");
-  assert.equal(c.page.mode, "continuous");
-  assert.deepEqual(c.page.margin, { top: 0, bottom: 0, left: 0 });
+  assert.equal(c.page.mode, "paginated");
+  assert.deepEqual(c.page.margin, { top: 36, bottom: 36, left: 36 });
   assert.equal(c.fonts, "auto");
   assert.equal(c.links, true);
   assert.equal(c.bundledFallbackFont, true);
