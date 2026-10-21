@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoice · html-to-pdf</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+        "@pdf-lib/fontkit": "https://esm.sh/@pdf-lib/fontkit@1.1.1"
+      }
+    }
+  </script>
+  <style>
+    /* Static WOFF faces: these embed exactly, so the PDF uses the real typeface.
+       (A variable WOFF2 from next/font or Google Fonts cannot be embedded.) */
+    @font-face { font-family: 'Inter'; src: url('../assets/fonts/inter/Inter-latin-400.woff') format('woff'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'Inter'; src: url('../assets/fonts/inter/Inter-latin-500.woff') format('woff'); font-weight: 500; font-display: swap; }
+    @font-face { font-family: 'Inter'; src: url('../assets/fonts/inter/Inter-latin-600.woff') format('woff'); font-weight: 600; font-display: swap; }
+    @font-face { font-family: 'Inter'; src: url('../assets/fonts/inter/Inter-latin-700.woff') format('woff'); font-weight: 700; font-display: swap; }
+
+    :root { --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#4f46e5; --brand2:#06b6d4; }
+    * { box-sizing: border-box; }
+    body { font-family: Inter, system-ui, sans-serif; margin: 0; padding: 40px 20px; background: #f1f5f9; color: var(--ink); }
+    .toolbar { max-width: 820px; margin: 0 auto 20px; display: flex; gap: 10px; align-items: center; }
+    .toolbar a { font-size: 14px; color: var(--brand); }
+    button { padding: 10px 18px; font: inherit; font-weight: 500; cursor: pointer; border: 0; border-radius: 8px; background: var(--brand); color: #fff; }
+    button:disabled { opacity: .5; }
+    #status { font-size: 14px; color: var(--muted); }
+
+    /* ---- the part that becomes the PDF ---- */
+    #content { max-width: 820px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(15,23,42,.08); }
+    .head { background: linear-gradient(135deg, var(--brand) 0%, var(--brand2) 100%); color: #fff; padding: 32px 40px; display: flex; justify-content: space-between; align-items: flex-start; }
+    .logo { display: flex; align-items: center; gap: 12px; font-size: 19px; font-weight: 700; letter-spacing: -.02em; }
+    .logo svg { display: block; }
+    .head .meta { text-align: right; font-size: 13px; line-height: 1.7; opacity: .95; }
+    .head .meta strong { display: block; font-size: 24px; font-weight: 700; letter-spacing: -.02em; opacity: 1; }
+    .body { padding: 32px 40px 40px; }
+    .parties { display: flex; gap: 40px; margin-bottom: 28px; }
+    .party { flex: 1; }
+    .label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+    .party p { margin: 0; font-size: 14px; line-height: 1.7; }
+    .party a { color: var(--brand); }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 0 0 10px; border-bottom: 2px solid var(--line); }
+    td { padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: top; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    td .desc { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+    .totals { margin-left: auto; width: 290px; font-size: 14px; }
+    .totals div { display: flex; justify-content: space-between; padding: 8px 0; }
+    .totals .grand { border-top: 2px solid var(--line); margin-top: 6px; padding-top: 14px; font-size: 18px; font-weight: 700; }
+    .totals .grand span:last-child { color: var(--brand); }
+    .note { margin-top: 30px; background: #f8fafc; border: 1px solid var(--line); border-left: 4px solid var(--brand); border-radius: 10px; padding: 16px 18px; font-size: 13px; line-height: 1.7; color: #334155; }
+    .foot { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
+  </style>
+</head>
+<body data-filename="invoice.pdf">
+  <div class="toolbar">
+    <button id="go">Download PDF</button>
+    <span id="status"></span>
+    <a href="./" style="margin-left:auto">&larr; All examples</a>
+  </div>
+
+  <div id="content">
+    <div class="head">
+      <div class="logo">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+          <rect width="34" height="34" rx="9" fill="rgba(255,255,255,0.18)"/>
+          <path d="M10 23V11h5.6a3.7 3.7 0 0 1 0 7.4H13.2V23H10Z" fill="#fff"/>
+          <circle cx="23.4" cy="20.6" r="2.4" fill="#fff"/>
+        </svg>
+        Northwind Studio
+      </div>
+      <div class="meta">
+        <strong>Invoice</strong>
+        INV-2026-0184<br />
+        Issued 14 October 2026<br />
+        Due 13 November 2026
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="parties">
+        <div class="party">
+          <div class="label">Billed to</div>
+          <p>
+            Harbour &amp; Co.<br />
+            412 Lighthouse Way<br />
+            Bristol BS1 4QA, United Kingdom<br />
+            <a href="mailto:accounts@harbour.example">accounts@harbour.example</a>
+          </p>
+        </div>
+        <div class="party">
+          <div class="label">From</div>
+          <p>
+            Northwind Studio Ltd<br />
+            7 Ellis Street, Floor 3<br />
+            Manchester M1 5JW, United Kingdom<br />
+            <a href="https://northwind.example">northwind.example</a>
+          </p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Description</th><th class="num">Qty</th><th class="num">Rate</th><th class="num">Amount</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Design system audit<div class="desc">Component inventory, accessibility review, written findings</div></td>
+            <td class="num">1</td><td class="num">£4,800.00</td><td class="num">£4,800.00</td>
+          </tr>
+          <tr>
+            <td>Interface design<div class="desc">14 screens, desktop and mobile, two revision rounds</div></td>
+            <td class="num">14</td><td class="num">£320.00</td><td class="num">£4,480.00</td>
+          </tr>
+          <tr>
+            <td>Front-end implementation<div class="desc">React component library, documented and tested</div></td>
+            <td class="num">62</td><td class="num">£95.00</td><td class="num">£5,890.00</td>
+          </tr>
+          <tr>
+            <td>Handover workshop<div class="desc">Half-day session, recorded, with written notes</div></td>
+            <td class="num">1</td><td class="num">£750.00</td><td class="num">£750.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="totals">
+        <div><span>Subtotal</span><span>£15,920.00</span></div>
+        <div><span>VAT (20%)</span><span>£3,184.00</span></div>
+        <div><span>Deposit received</span><span>−£5,000.00</span></div>
+        <div class="grand"><span>Total due</span><span>£14,104.00</span></div>
+      </div>
+
+      <div class="note">
+        <strong>Payment terms.</strong> Net 30. Bank transfer to Northwind Studio Ltd, sort code 04-00-75,
+        account 21886430. Please quote <strong>INV-2026-0184</strong> as the reference. Questions about this
+        invoice go to <a href="mailto:billing@northwind.example">billing@northwind.example</a>.
+      </div>
+
+      <div class="foot">
+        <span>Northwind Studio Ltd · Registered in England 09482210</span>
+        <span>VAT GB 284 7721 05</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { downloadPdf } from '../dist/index.js';
+    const go = document.getElementById('go');
+    const status = document.getElementById('status');
+    go.addEventListener('click', async () => {
+      go.disabled = true;
+      status.textContent = 'Building PDF…';
+      try {
+        // No config: the default is an exact copy of the desktop layout on one
+        // continuous page.
+        const { pageCount, bytes } = await downloadPdf('#content', 'invoice.pdf');
+        status.textContent = `${pageCount} page · ${(bytes.length / 1024).toFixed(0)} KB`;
+      } catch (err) {
+        status.textContent = `Failed: ${err.message}`;
+        console.error(err);
+      } finally {
+        go.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
