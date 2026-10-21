@@ -1,166 +1,160 @@
-# html-to-pdf
+<div align="center">
 
-Turn any element on the page into a real PDF, in the browser, with **no setup**.
+# @kaisarsofi/html-to-pdf
 
-```ts
-import { downloadPdf } from 'html-to-pdf';
+**Turn any element on your page into a real PDF, in the browser, in one line.**
+No headless browser, no server, no screenshots — just vector text, your fonts, and page breaks that land in sensible places.
 
-await downloadPdf(document.querySelector('#quote'), 'quote.pdf');
+[![npm](https://img.shields.io/npm/v/@kaisarsofi/html-to-pdf?color=4f46e5)](https://www.npmjs.com/package/@kaisarsofi/html-to-pdf)
+[![CI](https://github.com/kaisarsofi-kxar/html-to-pdf/actions/workflows/ci.yml/badge.svg)](https://github.com/kaisarsofi-kxar/html-to-pdf/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/@kaisarsofi/html-to-pdf?color=4f46e5)](./LICENSE)
+[![types](https://img.shields.io/badge/types-included-4f46e5)](./dist/index.d.ts)
+
+<img src="./docs/media/zoom.gif" width="520" alt="A generated invoice PDF being zoomed in 4x; the text stays perfectly sharp because it is vector text, not a screenshot." />
+
+*Real output from [`examples/invoice.html`](./examples/invoice.html). Every frame is a fresh render of the PDF — the text stays sharp because it is text.*
+
+</div>
+
+---
+
+## The problem
+
+You want a PDF of something already on your page — an invoice, a report, a ticket. Today you
+pick one of two bad options:
+
+| | What goes wrong |
+|---|---|
+| **`html2canvas` + `jsPDF`** | Rasterises the element into one tall image and slices it at fixed heights. The slice is blind, so it cuts through a line of text or a table row. The output is a *picture*: you cannot select or search the text, and it blurs when zoomed or printed. |
+| **Puppeteer / `window.print()`** | Paginates with an internal algorithm you cannot inspect or steer, with [long](https://github.com/puppeteer/puppeteer/issues/6951)-[standing](https://github.com/puppeteer/puppeteer/issues/6366) layout bugs. Puppeteer also means a headless browser process to run, host and pay for. |
+
+This package does neither. It **measures the layout your browser already produced**, then
+draws it as real PDF objects. Text stays text. Breaks land where nothing is crossing them.
+
+## Install
+
+```sh
+npm install @kaisarsofi/html-to-pdf
 ```
 
-That is the whole integration. No headless browser, no server, no fonts to host, nothing to configure.
-The PDF is an exact copy of the element's **desktop layout**, drawn as vector graphics:
+## Use it
 
-- text you can select and search, in the page's own fonts
-- backgrounds, **gradients**, borders, **rounded corners**, rounded image crops
-- images (resized only when they are far larger than shown), inline SVG icons
-- **clickable links** (`http`, `mailto:`, `tel:`)
-- the rupee sign and other symbols, without installing a font
-- one continuous page: nothing is cut, nothing is left blank
+```ts
+import { downloadPdf } from '@kaisarsofi/html-to-pdf';
 
-## How it behaves with no config
+await downloadPdf('#invoice', 'invoice.pdf');
+```
+
+That is the whole integration. No config, no fonts to host, nothing to wire up. Pass an
+element or a CSS selector.
+
+Need the bytes instead of a download?
+
+```ts
+import { generatePdf } from '@kaisarsofi/html-to-pdf';
+
+const { bytes, pageCount, warnings } = await generatePdf(element);
+```
+
+## What you get
+
+- **Selectable, searchable text** in the page's own fonts — embedded, not drawn as pixels
+- **Backgrounds, gradients, borders, rounded corners** and rounded image crops
+- **Images** (only resampled when far larger than shown) and **inline SVG** icons
+- **Clickable links** — `http`, `mailto:`, `tel:`
+- **CSS `transform`, `clip-path` and `box-shadow`**, drawn as vector shapes
+- **`₹` and other symbols** without installing a font
+- **One continuous page by default** — nothing cut, nothing left blank
+
+## Page breaks that make sense
+
+Ask for regular pages and breaks are chosen from the measured geometry: a page ends where no
+line, row, image or card is crossing it. A page is only closed when the next piece genuinely
+does not fit, so there is no unexplained white space either.
+
+```ts
+await downloadPdf('#invoice', 'invoice.pdf', {
+  page: { mode: 'paginated', size: 'A4', margin: 30 },
+});
+```
+
+<div align="center">
+<img src="./docs/media/pages.gif" width="420" alt="A 28-line-item invoice paginated to three A4 pages; no table row is cut across a page break." />
+
+*The same invoice with 28 line items, paginated to A4. No row is cut across a break.*
+</div>
+
+## Sensible defaults
+
+With no config at all:
 
 | | Default |
 |---|---|
 | Layout | An exact copy of the screen (`layout: 'preserve'`) |
-| Rendering | A hidden copy laid out at **1440px** viewport width in the **light** theme, so the PDF never depends on the user's window size or dark mode |
-| Document width | Measured from the element, held between 900 and 1200 px (a phone still gets a desktop-width document) |
-| Pages | One continuous page (`page.mode: 'continuous'`) |
-| Fonts | The page's own static `@font-face` fonts (TTF/OTF/WOFF); WOFF2 and variable fonts need static files passed in (see Fonts) |
-| Missing characters | A bundled Unicode font (Noto Sans), loaded only if some character needs it |
-| Images | Kept sharp at 2 device pixels per drawn pixel; smaller images are never touched |
+| Rendering | A hidden copy at **1440px** viewport width in the **light** theme, so the PDF never depends on the reader's window size or dark mode |
+| Document width | Measured, held between 900 and 1200px — a phone still gets a desktop-width document |
+| Pages | One continuous page |
+| Fonts | The page's own static `@font-face` files; bundled Inter substituted when yours cannot be embedded |
+| Missing characters | A bundled Noto Sans, loaded only if some character needs it |
+| Images | Sharp at 2 device pixels per drawn pixel; smaller images untouched |
 | Links | Clickable |
 
-`generatePdf(element, config)` returns the bytes instead of downloading them:
+Hide what should not be in the PDF with `data-pdf-hide` (buttons, toolbars). Keep a block off
+a break with `data-pdf-break="avoid"`.
+
+## It never throws at you
+
+A font that cannot be embedded, an image the browser will not let the page read, a CSS
+feature that can only be approximated — none of these fail the export. You get the PDF plus
+an honest account of what differs:
 
 ```ts
-const { bytes, pageCount, warnings } = await generatePdf('#quote');
+const { warnings, notes } = await generatePdf('#invoice');
 ```
 
-It accepts an element or a CSS selector, and never throws for a missing font, glyph or image: those
-become `warnings`.
+## Documentation
 
-## Configuration
+| Guide | |
+|---|---|
+| [Configuration](./docs/configuration.md) | Every option, its default, and the markup hooks |
+| [Frameworks](./docs/frameworks.md) | React, Next.js (including `next/font`), Vue, plain HTML |
+| [Fonts](./docs/fonts.md) | Why WOFF2 and variable fonts cannot be embedded, and what to do |
+| [Images](./docs/images.md) | The cross-origin problem, and both ways out |
+| [How it works](./docs/how-it-works.md) | The four passes, and why there is no Node build |
+| [Troubleshooting](./docs/troubleshooting.md) | The failure modes, in the order people hit them |
 
-Everything is optional. Change only what you need.
+## Examples
 
-```ts
-await downloadPdf(element, 'quote.pdf', {
-  page: { mode: 'paginated', size: 'A4', margin: 36 },
-  render: { viewportWidth: 1440, contentWidth: 900, theme: 'light' },
-  fonts: [{ family: 'Inter', weight: 400, url: '/fonts/Inter-400.woff' }],
-  images: { pixelRatio: 2, quality: 0.95 },
-});
-```
-
-| Option | Default | |
-|---|---|---|
-| `layout` | `'preserve'` | `'preserve'` copies the layout exactly. `'flow'` re-stacks content as plain text, images and tables (suits document-like pages). |
-| `page.mode` | `'continuous'` | `'continuous'`: one tall page. `'paginated'`: regular pages cut between lines of text, images and small cards. |
-| `page.size` | `'A4'` | `'A4'`, `'LETTER'`, or `{ width, height }` in points. Used when paginated. |
-| `page.maxHeight` | none | Points. In `'continuous'` mode, a document taller than this is split into a few equally wide, tall pages (cut at safe lines). Try `1600` if a viewer scrolls a very long page jerkily. |
-| `page.margin` | `0` / `36` | Points, or `{ top, bottom, left }`. `0` for continuous, `36` for paginated. |
-| `page.background` | none | `{ r, g, b }` (0 to 1) painted behind each page. |
-| `render` | on | Set `false` to draw the element exactly as it is on screen, with no hidden frame. |
-| `render.view` | `'desktop'` | `'desktop'`: always copy the desktop layout. `'responsive'`: follow the device that downloads. A phone gets the page's mobile layout (readable without zooming), anything wider gets the desktop layout. |
-| `render.phoneBreakpoint` / `phoneWidth` | `767` / `430` | `'responsive'` only: screens this narrow count as a phone, and the mobile layout is drawn this wide (CSS px). |
-| `render.viewportWidth` | `1440` | Width responsive CSS sees. |
-| `render.contentWidth` | `'auto'` | CSS px, or `'auto'` to measure the element. |
-| `render.minContentWidth` / `maxContentWidth` | `900` / `1200` | Bounds for `'auto'`. |
-| `render.theme` | `'light'` | `'light'`, `'dark'`, or `'auto'` (keep the page's current theme). |
-| `render.hide` | `'[data-pdf-hide]'` | Elements matching this are removed (buttons, toolbars). |
-| `render.skip` | `'[data-pdf-skip]'` | Elements matching this, and their contents, are skipped. |
-| `fonts` | `'auto'` | `'auto'` reads the page's `@font-face` rules. Or a list of `{ family, weight, style?, url \| bytes }`. |
-| `fallbackFonts` | `[]` | Tried in order for characters the page's fonts lack, before the bundled font. |
-| `bundledFallbackFont` | `true` | Use the bundled Unicode font (covers `₹`). |
-| `images.pixelRatio` | `2` | Pixels kept per drawn CSS pixel. |
-| `images.quality` | `0.95` | JPEG quality for photos that are reduced. |
-| `images.recompressAbove` | `1.5` | An image is left untouched unless larger than this many times what it needs. |
-| `images.resample` | `true` | `false` embeds every image exactly as fetched. |
-| `images.loader` | none | Called for an image the browser will not let the page read (see below). |
-| `links` | `true` | Make links clickable. |
-| `logWarnings` | `true` | Print `warnings` to the console. |
-| `flow.oversized` / `flow.minFill` | `'scale'` / `0.4` | `'flow'` layout only. |
-
-Mark parts of the page that should stay out of the PDF with `data-pdf-hide` (removed) or `data-pdf-skip`.
-Keep a block from being split across pages (paginated mode) with `data-pdf-break="avoid"` or CSS
-`break-inside: avoid`.
-
-## Fonts
-
-By default the package reads the page's own `@font-face` rules and embeds static **TTF, OTF and WOFF**
-files, so text is drawn in the typeface the user sees.
-
-**WOFF2 and variable fonts cannot be embedded** (the PDF library's font subsetter cannot read them). This is
-the usual case for `next/font` and Google Fonts. When text on the page uses one, the PDF falls back to a
-standard font for it and `warnings` says so once. For exact text, give the package static files, one per
-weight, with the `fonts` option:
-
-```ts
-fonts: [300, 400, 500, 600, 700].map((weight) => ({
-  family: 'Inter', weight, url: `/fonts/Inter-${weight}.woff`,
-}))
-```
-
-Weights are matched to the nearest file, so the PDF can use exactly the weights the page does.
-
-A face whose `unicode-range` does not cover basic Latin (a Latin-extended or Cyrillic file, say) is used
-automatically for just the characters the main face lacks. Anything still missing is drawn from the bundled
-Noto Sans (SIL Open Font License, see `NOTICE`), which is only loaded when a character needs it.
-Any font that fails to embed is reported in `warnings`; it can never hang or fail the export.
-
-## Images from another domain
-
-A browser will **display** an image from another origin but will not let a script **read** its bytes unless
-that server sends CORS headers. The PDF needs the bytes, so an image from a host without CORS is left out
-and reported in `warnings`:
-
-> 3 image(s) were left out because the browser blocked reading them: https://storage.googleapis.com. Allow this
-> site's origin in that host's CORS settings...
-
-The proper fix is on the image host: allow the site's origin. For a Google Cloud Storage / Firebase bucket:
-
-```json
-[
-  {
-    "origin": ["https://app.example.com", "http://localhost:3000"],
-    "method": ["GET"],
-    "responseHeader": ["Content-Type"],
-    "maxAgeSeconds": 3600
-  }
-]
-```
+Served over HTTP, because they use native ES modules:
 
 ```sh
-gcloud storage buckets update gs://YOUR_BUCKET --cors-file=cors.json
+npm run build && python3 scripts/serve.py
 ```
 
-If you cannot change the host, give the package a way to fetch those images (for example through your own
-server) with `images.loader: async (url) => (await fetch('/my-proxy?url=' + encodeURIComponent(url))).blob()`.
+Then open <http://localhost:4173/examples/>. The [invoice](./examples/invoice.html) is the
+one to look at first — it is the source of the GIFs above.
 
-## Effects that are drawn
+## Requirements and limits
 
-- **CSS `transform`** (rotate, scale, skew, translate, matrix) on any element, with `transform-origin`. The
-  element and everything inside it is drawn through the matrix, nested transforms included.
-- **`clip-path`** basic shapes: `polygon()` (with `evenodd`), `inset()` (with `round`), `circle()` and
-  `ellipse()`. The shape clips the element, its shadow and everything inside it.
-- **`box-shadow`** (outer shadows, any number): crisp ones (rings, hard shadows) as vector shapes, blurred
-  ones as a few stacked translucent shapes that imitate the blur (no bitmaps, so long documents stay smooth to scroll).
-
-## What is not drawn
-
-Reported in `result.notes`, never drawn wrongly: inset `box-shadow`, `clip-path: url()` / `path()` and
-shapes using `calc()` / `var()`, `backdrop-filter`, `::before` / `::after` content, and radial/conic
-gradients are approximated. A document taller than the PDF page-size limit (about 19,200 CSS px)
-automatically falls back to regular pages.
-
-## The `flow` layout
-
-`layout: 'flow'` is the package's original engine: it measures real line, row and image heights and re-stacks
-them into pages so no page ends with unexplained empty space and nothing is cut through a line. It draws text,
-images and table rows only, so it suits reports and articles rather than designed pages.
+- **Browser only.** It measures a real layout, so there is no Node build. Importing it
+  during SSR is safe; calling it is not — call it from an event handler.
+- **Not pixel-perfect for every CSS feature.** Inset shadows, `clip-path: url()` / `path()`,
+  shapes using `calc()` / `var()`, `backdrop-filter` and `::before` / `::after` content are
+  skipped; radial and conic gradients are approximated. All of it is reported in `notes`.
+- **~1.6 MB packed**, mostly the bundled Inter and Noto Sans, which are fetched lazily at
+  runtime only when a PDF actually needs them.
 
 ## Development
 
-TypeScript, strict. `npm run build` compiles to `dist/` (and generates the bundled font modules);
-`npm test` builds and runs the tests; `npm run typecheck` checks without emitting.
+```sh
+npm install
+npm run build      # bundles the fonts, then compiles to dist/
+npm test           # builds, then runs the suite
+npm run typecheck  # no emit
+```
+
+TypeScript, strict mode.
+
+## License
+
+[MIT](./LICENSE) © Kaisar Sofi. Bundled font licences in [`NOTICE`](./NOTICE).
