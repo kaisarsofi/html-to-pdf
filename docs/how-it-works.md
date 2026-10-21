@@ -26,10 +26,10 @@ This package measures first and draws second, in the page you are already on.
    transforms, clip paths and shadows. Geometry comes from `getBoundingClientRect()` and the
    `Range` API, so the numbers are the browser's own layout, not a guess.
 
-3. **Break.** For paginated output, break positions are chosen from the measured geometry —
-   a page ends at a position no line, row, image or card straddles. Nothing is cut, and a
-   page is only closed when the next piece genuinely does not fit, so there is no
-   unexplained blank space either. Continuous mode skips this entirely: the page is made
+3. **Break.** Break positions are chosen from the measured geometry — a page ends at a
+   position no line, row, image or card straddles. Nothing is cut, and a page is only closed
+   when the next piece genuinely does not fit, so there is no unexplained blank space either.
+   This is the default. `page.mode: 'continuous'` skips the step entirely and makes one page
    exactly as tall as the document.
 
 4. **Write.** Primitives are drawn into a real PDF with `pdf-lib`: vector shapes, embedded

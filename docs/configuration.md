@@ -1,11 +1,11 @@
 # Configuration
 
 Every option is optional. `downloadPdf(element)` with no config produces an exact copy of
-the element's desktop layout on one continuous page.
+the element's desktop layout across A4 pages, broken where no line, row or card is crossing.
 
 ```ts
 await downloadPdf(element, 'quote.pdf', {
-  page: { mode: 'paginated', size: 'A4', margin: 36 },
+  page: { mode: 'continuous' },
   render: { viewportWidth: 1440, contentWidth: 900, theme: 'light' },
   fonts: [{ family: 'Inter', weight: 400, url: '/fonts/Inter-400.woff' }],
   images: { pixelRatio: 2, quality: 0.95 },
@@ -22,10 +22,10 @@ await downloadPdf(element, 'quote.pdf', {
 
 | Option | Default | |
 |---|---|---|
-| `page.mode` | `'continuous'` | `'continuous'`: one tall page exactly as long as the document, so nothing is cut and nothing is left blank. `'paginated'`: regular pages, cut between lines of text, images and small cards. |
+| `page.mode` | `'paginated'` | `'paginated'`: regular pages of `size`, cut between lines of text, images and small cards. `'continuous'`: one tall page exactly as long as the document, for something only ever read on a screen. |
 | `page.size` | `'A4'` | `'A4'`, `'LETTER'`, or `{ width, height }` in points. Only used when paginated. |
 | `page.maxHeight` | none | Points. In continuous mode, a document taller than this is split into a few equally wide, tall pages. Try `1600` if a viewer scrolls a very long page jerkily. |
-| `page.margin` | `0` / `36` | Points, or `{ top, bottom, left }`. `0` for continuous, `36` for paginated. |
+| `page.margin` | `36` / `0` | Points, or `{ top, bottom, left }`. `36` for paginated, `0` for continuous (a margin there would frame the whole document rather than pad a page). |
 | `page.background` | none | `{ r, g, b }` from 0 to 1, painted behind each page. |
 
 ## Rendering

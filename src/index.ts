@@ -6,8 +6,9 @@
  *
  * That is the whole setup. The element is laid out in a hidden desktop-width frame in the
  * light theme, measured, and drawn as a real vector PDF (selectable text, clickable links,
- * backgrounds, gradients, rounded corners, images) on one continuous page. Everything is
- * configurable through an optional config object; nothing else needs wiring up.
+ * backgrounds, gradients, rounded corners, images) across A4 pages, broken where no line,
+ * row or card is crossing. Everything is configurable through an optional config object;
+ * `page.mode: 'continuous'` gives one tall page instead.
  */
 
 import { analyze } from "./core/content-flow-analyzer.js";

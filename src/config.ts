@@ -3,7 +3,7 @@
  *
  * Everything a user can change, and what it defaults to. Every field is
  * optional: `downloadPdf(element)` with no config produces the exact desktop
- * layout of the element as one continuous page.
+ * layout of the element across A4 pages.
  */
 
 import type { FontSource } from "./core/font-registry.js";
@@ -27,8 +27,9 @@ export type PageConfig = {
   /** Page size in PDF points, or a name. Default 'A4'. Only matters when `mode` is 'paginated'. */
   size?: PageSize;
   /**
-   * 'continuous' (default): one tall page exactly as long as the document, so nothing is cut and
-   * nothing is left blank. 'paginated': regular pages, cut between lines of text, images and small cards.
+   * 'paginated' (default): regular pages of `size`, cut between lines of text, images and small
+   * cards, so a page never ends mid-row and never closes early. 'continuous': one tall page exactly
+   * as long as the document, for something that will only ever be read on a screen.
    */
   mode?: "continuous" | "paginated";
   /**
@@ -37,7 +38,7 @@ export type PageConfig = {
    * and scroll jerkily; several pages are drawn lazily. Default: no limit (always one page).
    */
   maxHeight?: number;
-  /** Page margin in points. Default 0 for 'continuous', 36 for 'paginated'. */
+  /** Page margin in points. Default 36 for 'paginated', 0 for 'continuous'. */
   margin?: PageMargin;
   /** Colour behind each page. Default none (white). */
   background?: { r: number; g: number; b: number } | null;
@@ -203,7 +204,7 @@ export const RENDER_DEFAULTS: ResolvedRender = {
 };
 
 export function resolveConfig(config: PdfConfig = {}): ResolvedConfig {
-  const mode = config.page?.mode ?? "continuous";
+  const mode = config.page?.mode ?? "paginated";
   const size =
     typeof config.page?.size === "object"
       ? config.page.size

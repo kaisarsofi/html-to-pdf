@@ -31,16 +31,17 @@ The element must be rendered and visible when you call. A `display: none` elemen
 unmounted component, or a `ref` read before paint has no layout to copy. Call it from an
 event handler, not during render.
 
-## The PDF is one enormous page
+## I want one long page instead of A4 pages
 
-That is the default (`page.mode: 'continuous'`): one page exactly as long as the document,
-so nothing is cut. For regular pages use `page: { mode: 'paginated', size: 'A4' }`.
+The default is `page.mode: 'paginated'` — regular A4 pages. For a single page exactly as tall
+as the document, use `page: { mode: 'continuous' }`. That mode also drops the page margin to
+zero, since a margin around one document-sized page reads as a border rather than padding.
 
-## A very long PDF scrolls jerkily
+## A very long continuous PDF scrolls jerkily
 
-Some viewers draw a single very long page in one go. Set `page.maxHeight` (try `1600`) to
-split it into several tall pages, which are drawn lazily. A document past the PDF page-size
-limit (about 19,200 CSS px) falls back to regular pages automatically.
+Some viewers draw a single very long page in one go. In `'continuous'` mode, set
+`page.maxHeight` (try `1600`) to split it into several tall pages, which are drawn lazily. A
+document past the PDF page-size limit (about 19,200 CSS px) falls back automatically.
 
 ## It fails during server-side rendering
 
