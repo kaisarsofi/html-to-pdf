@@ -6,7 +6,7 @@
 No headless browser, no server, no screenshots — just vector text, your fonts, and page breaks that land in sensible places.
 
 [![npm](https://img.shields.io/npm/v/@kaisarsofi/html-to-pdf?color=4f46e5)](https://www.npmjs.com/package/@kaisarsofi/html-to-pdf)
-[![CI](https://github.com/kaisarsofi-kxar/html-to-pdf/actions/workflows/ci.yml/badge.svg)](https://github.com/kaisarsofi-kxar/html-to-pdf/actions/workflows/ci.yml)
+[![CI](https://github.com/kaisarsofi/html-to-pdf/actions/workflows/ci.yml/badge.svg)](https://github.com/kaisarsofi/html-to-pdf/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/@kaisarsofi/html-to-pdf?color=4f46e5)](./LICENSE)
 [![types](https://img.shields.io/badge/types-included-4f46e5)](./dist/index.d.ts)
 
@@ -66,23 +66,50 @@ const { bytes, pageCount, warnings } = await generatePdf(element);
 - **`₹` and other symbols** without installing a font
 - **One continuous page by default** — nothing cut, nothing left blank
 
-## Page breaks that make sense
+## Two ways to page it
 
-Ask for regular pages and breaks are chosen from the measured geometry: a page ends where no
-line, row, image or card is crossing it. A page is only closed when the next piece genuinely
-does not fit, so there is no unexplained white space either.
+The same document, the same one-line call, two page modes.
+
+<table>
+<tr>
+<td width="50%" align="center">
+<img src="./docs/media/continuous.gif" width="100%" alt="A quarterly statement as one continuous PDF page, scrolling from top to bottom in a single uninterrupted sheet." />
+<br /><b>One long page</b> <i>(default)</i>
+</td>
+<td width="50%" align="center">
+<img src="./docs/media/paginated.gif" width="100%" alt="The same statement as two A4 pages, flipping between them, with no table row split across the break." />
+<br /><b>Normal A4 pages</b>
+</td>
+</tr>
+<tr>
+<td valign="top">
 
 ```ts
-await downloadPdf('#invoice', 'invoice.pdf', {
+await downloadPdf('#statement', 'statement.pdf');
+```
+
+One page made exactly as tall as the document. Nothing
+is cut and nothing is left blank, because there is no
+break to get wrong — best for anything read on screen.
+
+</td>
+<td valign="top">
+
+```ts
+await downloadPdf('#statement', 'statement.pdf', {
   page: { mode: 'paginated', size: 'A4', margin: 30 },
 });
 ```
 
-<div align="center">
-<img src="./docs/media/pages.gif" width="420" alt="A 28-line-item invoice paginated to three A4 pages; no table row is cut across a page break." />
+Breaks are chosen from the measured geometry: a page
+ends where no line, row, image or card is crossing it,
+and only closes when the next piece will not fit.
 
-*The same invoice with 28 line items, paginated to A4. No row is cut across a break.*
-</div>
+</td>
+</tr>
+</table>
+
+Both are real output from [`examples/statement.html`](./examples/statement.html).
 
 ## Sensible defaults
 
