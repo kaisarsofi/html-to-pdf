@@ -1,0 +1,29 @@
+name: Publish to npm
+
+# Publishes when a GitHub release is created, so the tag and the npm version
+# always agree. Needs an NPM_TOKEN secret with publish rights on the
+# @kaisarsofi scope.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # npm provenance
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      # prepack runs the build; publishConfig.access makes the scoped package public.
+      - run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
