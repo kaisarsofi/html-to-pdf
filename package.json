@@ -25,13 +25,13 @@
     "react",
     "nextjs"
   ],
-  "homepage": "https://github.com/kaisarsofi-kxar/html-to-pdf#readme",
+  "homepage": "https://github.com/kaisarsofi/html-to-pdf#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaisarsofi-kxar/html-to-pdf.git"
+    "url": "git+https://github.com/kaisarsofi/html-to-pdf.git"
   },
   "bugs": {
-    "url": "https://github.com/kaisarsofi-kxar/html-to-pdf/issues"
+    "url": "https://github.com/kaisarsofi/html-to-pdf/issues"
   },
   "author": "Kaisar Sofi",
   "license": "MIT",

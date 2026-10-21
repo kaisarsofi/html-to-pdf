@@ -77,4 +77,4 @@ land where nothing is crossing them.
 - 71 tests covering layout extraction, page breaking, pagination, colour parsing, SVG paths
   and config resolution, run on Node 18, 20 and 22.
 
-[0.3.4]: https://github.com/kaisarsofi-kxar/html-to-pdf/releases/tag/v0.3.4
+[0.3.4]: https://github.com/kaisarsofi/html-to-pdf/releases/tag/v0.3.4
