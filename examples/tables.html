@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Long table · html-to-pdf</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+        "@pdf-lib/fontkit": "https://esm.sh/@pdf-lib/fontkit@1.1.1"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./shared/example.css" />
+</head>
+<body data-filename="tables.pdf" data-page-size="A4">
+  <div class="toolbar">
+    <a class="back" href="./">&larr; All examples</a>
+    <div>
+      <button id="go">Download PDF</button>
+      <button id="preview">Preview PDF</button>
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <h1>Long table</h1>
+  <p class="lede">A long table straddling several page breaks. Every <code>&lt;tr&gt;</code> is
+inherently atomic, so no row is ever cut in half — a row that does not fit
+moves whole to the next page.</p>
+
+  <div id="content">
+    <h1>Long Table — Rows Are Never Split</h1>
+    <p>The table below has enough rows to cross multiple page boundaries. Each row is measured
+      as a single atomic box, so the engine either places the entire row or defers it.</p>
+    <table>
+      <thead><tr><th>#</th><th>Account</th><th>Region</th><th>Bookings</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Account 1 Holdings</td><td>APAC</td><td>13373</td><td>Renewal</td></tr>
+        <tr><td>2</td><td>Account 2 Holdings</td><td>AMER</td><td>14746</td><td>Churned</td></tr>
+        <tr><td>3</td><td>Account 3 Holdings</td><td>LATAM</td><td>16119</td><td>Pilot</td></tr>
+        <tr><td>4</td><td>Account 4 Holdings</td><td>EMEA</td><td>17492</td><td>Active</td></tr>
+        <tr><td>5</td><td>Account 5 Holdings</td><td>APAC</td><td>18865</td><td>Renewal</td></tr>
+        <tr><td>6</td><td>Account 6 Holdings</td><td>AMER</td><td>20238</td><td>Churned</td></tr>
+        <tr><td>7</td><td>Account 7 Holdings</td><td>LATAM</td><td>21611</td><td>Pilot</td></tr>
+        <tr><td>8</td><td>Account 8 Holdings</td><td>EMEA</td><td>22984</td><td>Active</td></tr>
+        <tr><td>9</td><td>Account 9 Holdings</td><td>APAC</td><td>24357</td><td>Renewal</td></tr>
+        <tr><td>10</td><td>Account 10 Holdings</td><td>AMER</td><td>25730</td><td>Churned</td></tr>
+        <tr><td>11</td><td>Account 11 Holdings</td><td>LATAM</td><td>27103</td><td>Pilot</td></tr>
+        <tr><td>12</td><td>Account 12 Holdings</td><td>EMEA</td><td>28476</td><td>Active</td></tr>
+        <tr><td>13</td><td>Account 13 Holdings</td><td>APAC</td><td>29849</td><td>Renewal</td></tr>
+        <tr><td>14</td><td>Account 14 Holdings</td><td>AMER</td><td>31222</td><td>Churned</td></tr>
+        <tr><td>15</td><td>Account 15 Holdings</td><td>LATAM</td><td>32595</td><td>Pilot</td></tr>
+        <tr><td>16</td><td>Account 16 Holdings</td><td>EMEA</td><td>33968</td><td>Active</td></tr>
+        <tr><td>17</td><td>Account 17 Holdings</td><td>APAC</td><td>35341</td><td>Renewal</td></tr>
+        <tr><td>18</td><td>Account 18 Holdings</td><td>AMER</td><td>36714</td><td>Churned</td></tr>
+        <tr><td>19</td><td>Account 19 Holdings</td><td>LATAM</td><td>38087</td><td>Pilot</td></tr>
+        <tr><td>20</td><td>Account 20 Holdings</td><td>EMEA</td><td>39460</td><td>Active</td></tr>
+        <tr><td>21</td><td>Account 21 Holdings</td><td>APAC</td><td>40833</td><td>Renewal</td></tr>
+        <tr><td>22</td><td>Account 22 Holdings</td><td>AMER</td><td>42206</td><td>Churned</td></tr>
+        <tr><td>23</td><td>Account 23 Holdings</td><td>LATAM</td><td>43579</td><td>Pilot</td></tr>
+        <tr><td>24</td><td>Account 24 Holdings</td><td>EMEA</td><td>44952</td><td>Active</td></tr>
+        <tr><td>25</td><td>Account 25 Holdings</td><td>APAC</td><td>46325</td><td>Renewal</td></tr>
+        <tr><td>26</td><td>Account 26 Holdings</td><td>AMER</td><td>47698</td><td>Churned</td></tr>
+        <tr><td>27</td><td>Account 27 Holdings</td><td>LATAM</td><td>49071</td><td>Pilot</td></tr>
+        <tr><td>28</td><td>Account 28 Holdings</td><td>EMEA</td><td>50444</td><td>Active</td></tr>
+        <tr><td>29</td><td>Account 29 Holdings</td><td>APAC</td><td>51817</td><td>Renewal</td></tr>
+        <tr><td>30</td><td>Account 30 Holdings</td><td>AMER</td><td>53190</td><td>Churned</td></tr>
+        <tr><td>31</td><td>Account 31 Holdings</td><td>LATAM</td><td>54563</td><td>Pilot</td></tr>
+        <tr><td>32</td><td>Account 32 Holdings</td><td>EMEA</td><td>55936</td><td>Active</td></tr>
+        <tr><td>33</td><td>Account 33 Holdings</td><td>APAC</td><td>57309</td><td>Renewal</td></tr>
+        <tr><td>34</td><td>Account 34 Holdings</td><td>AMER</td><td>58682</td><td>Churned</td></tr>
+        <tr><td>35</td><td>Account 35 Holdings</td><td>LATAM</td><td>60055</td><td>Pilot</td></tr>
+        <tr><td>36</td><td>Account 36 Holdings</td><td>EMEA</td><td>61428</td><td>Active</td></tr>
+        <tr><td>37</td><td>Account 37 Holdings</td><td>APAC</td><td>62801</td><td>Renewal</td></tr>
+        <tr><td>38</td><td>Account 38 Holdings</td><td>AMER</td><td>64174</td><td>Churned</td></tr>
+        <tr><td>39</td><td>Account 39 Holdings</td><td>LATAM</td><td>65547</td><td>Pilot</td></tr>
+        <tr><td>40</td><td>Account 40 Holdings</td><td>EMEA</td><td>66920</td><td>Active</td></tr>
+        <tr><td>41</td><td>Account 41 Holdings</td><td>APAC</td><td>68293</td><td>Renewal</td></tr>
+        <tr><td>42</td><td>Account 42 Holdings</td><td>AMER</td><td>69666</td><td>Churned</td></tr>
+        <tr><td>43</td><td>Account 43 Holdings</td><td>LATAM</td><td>71039</td><td>Pilot</td></tr>
+        <tr><td>44</td><td>Account 44 Holdings</td><td>EMEA</td><td>72412</td><td>Active</td></tr>
+        <tr><td>45</td><td>Account 45 Holdings</td><td>APAC</td><td>73785</td><td>Renewal</td></tr>
+        <tr><td>46</td><td>Account 46 Holdings</td><td>AMER</td><td>75158</td><td>Churned</td></tr>
+        <tr><td>47</td><td>Account 47 Holdings</td><td>LATAM</td><td>76531</td><td>Pilot</td></tr>
+        <tr><td>48</td><td>Account 48 Holdings</td><td>EMEA</td><td>77904</td><td>Active</td></tr>
+        <tr><td>49</td><td>Account 49 Holdings</td><td>APAC</td><td>79277</td><td>Renewal</td></tr>
+        <tr><td>50</td><td>Account 50 Holdings</td><td>AMER</td><td>80650</td><td>Churned</td></tr>
+        <tr><td>51</td><td>Account 51 Holdings</td><td>LATAM</td><td>82023</td><td>Pilot</td></tr>
+        <tr><td>52</td><td>Account 52 Holdings</td><td>EMEA</td><td>83396</td><td>Active</td></tr>
+        <tr><td>53</td><td>Account 53 Holdings</td><td>APAC</td><td>84769</td><td>Renewal</td></tr>
+        <tr><td>54</td><td>Account 54 Holdings</td><td>AMER</td><td>86142</td><td>Churned</td></tr>
+        <tr><td>55</td><td>Account 55 Holdings</td><td>LATAM</td><td>87515</td><td>Pilot</td></tr>
+        <tr><td>56</td><td>Account 56 Holdings</td><td>EMEA</td><td>88888</td><td>Active</td></tr>
+        <tr><td>57</td><td>Account 57 Holdings</td><td>APAC</td><td>90261</td><td>Renewal</td></tr>
+        <tr><td>58</td><td>Account 58 Holdings</td><td>AMER</td><td>91634</td><td>Churned</td></tr>
+        <tr><td>59</td><td>Account 59 Holdings</td><td>LATAM</td><td>93007</td><td>Pilot</td></tr>
+        <tr><td>60</td><td>Account 60 Holdings</td><td>EMEA</td><td>94380</td><td>Active</td></tr>
+      </tbody>
+    </table>
+    <p>After the table, normal prose resumes — pagination continues from wherever the last row
+      left the cursor, with no forced page break and no padding inserted to "tidy up".</p>
+  </div>
+
+  <iframe id="preview-frame" hidden width="100%" height="820"
+          style="border:1px solid #d8d8de;border-radius:8px;margin-top:24px"></iframe>
+
+  <script type="module" src="./shared/example.js"></script>
+</body>
+</html>

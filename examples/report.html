@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mixed report · html-to-pdf</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+        "@pdf-lib/fontkit": "https://esm.sh/@pdf-lib/fontkit@1.1.1"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./shared/example.css" />
+</head>
+<body data-filename="report.pdf" data-page-size="A4">
+  <div class="toolbar">
+    <a class="back" href="./">&larr; All examples</a>
+    <div>
+      <button id="go">Download PDF</button>
+      <button id="preview">Preview PDF</button>
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <h1>Mixed report</h1>
+  <p class="lede">The original end-to-end demo: headings, wrapped paragraphs and a table in one
+document. Every layer of the pipeline runs — measure, paginate, draw.</p>
+
+  <div id="content">
+    <h1>Quarterly Report — Example Document</h1>
+    <p>
+      This paragraph is intentionally long enough to wrap across several visual lines, so you can see
+      that html-to-pdf breaks pages between LINES of text rather than either cutting a line in half (the
+      screenshot-slicing problem) or leaving a large blank gap because the whole paragraph was treated
+      as one unsplittable block (the naive "avoid mid-content cuts" over-correction). Each line is
+      measured individually with the browser's own layout engine, so the break point is always exactly
+      where a line already ends.
+    </p>
+    <h2>Section One</h2>
+    <p>
+      Every table row below is marked atomic, so a row is never split between two pages — if a row
+      doesn't fit in the remaining space, the whole row (and only that row) moves to the next page,
+      and nothing above it is stretched or padded to compensate.
+    </p>
+    <table>
+      <thead><tr><th>Item</th><th>Q1</th><th>Q2</th><th>Q3</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td>120,000</td><td>134,500</td><td>128,900</td></tr>
+        <tr><td>Costs</td><td>80,000</td><td>85,200</td><td>82,750</td></tr>
+        <tr><td>Headcount</td><td>42</td><td>45</td><td>47</td></tr>
+        <tr><td>Net margin</td><td>33%</td><td>36%</td><td>35%</td></tr>
+      </tbody>
+    </table>
+    <h2>Section Two</h2>
+    <p>
+      This second block of text exists mainly to push content close to a page boundary, so that when
+      you generate the PDF you can see the pagination engine make a real decision about where to break
+      — packing the first page as full as it can go, instead of stopping short and leaving unexplained
+      white space at the bottom.
+    </p>
+    <p>
+      Repeat: no empty gap should appear above a page break unless the next piece of content genuinely
+      could not fit in the space that was left.
+    </p>
+  </div>
+
+  <iframe id="preview-frame" hidden width="100%" height="820"
+          style="border:1px solid #d8d8de;border-radius:8px;margin-top:24px"></iframe>
+
+  <script type="module" src="./shared/example.js"></script>
+</body>
+</html>

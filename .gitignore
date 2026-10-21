@@ -1,0 +1,6 @@
+node_modules/
+dist/
+src/fonts/data/
+*.tgz
+.DS_Store
+.claude/

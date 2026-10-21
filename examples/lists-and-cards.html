@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lists and cards · html-to-pdf</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+        "@pdf-lib/fontkit": "https://esm.sh/@pdf-lib/fontkit@1.1.1"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./shared/example.css" />
+</head>
+<body data-filename="lists-and-cards.pdf" data-page-size="A4">
+  <div class="toolbar">
+    <a class="back" href="./">&larr; All examples</a>
+    <div>
+      <button id="go">Download PDF</button>
+      <button id="preview">Preview PDF</button>
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <h1>Lists and cards</h1>
+  <p class="lede">List items are atomic by tag. Cards are plain <code>&lt;div&gt;</code>s, so they
+opt in explicitly with <code>data-pdf-break="avoid"</code> — the escape hatch for
+layouts the analyzer cannot infer.</p>
+
+  <div id="content">
+    <h1>Lists and Keep-Together Cards</h1>
+    <h2>Ordered list (atomic by tag)</h2>
+    <ol>
+      <li>Step 1 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 2 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 3 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 4 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 5 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 6 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 7 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 8 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 9 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 10 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 11 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 12 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 13 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 14 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 15 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 16 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 17 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+      <li>Step 18 — a multi-line list item whose text is long enough to wrap, demonstrating
+        that the whole item travels to the next page together rather than leaving its first
+        line stranded above a page break.</li>
+    </ol>
+    <h2>Cards (atomic by opt-in)</h2>
+    <p>A card is not a <code>tr</code> or an <code>li</code>, so nothing about its tag says
+      "keep me together". The <code>data-pdf-break="avoid"</code> attribute says it instead.</p>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 1</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 2</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 3</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 4</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 5</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 6</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 7</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 8</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 9</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+    <div class="card" data-pdf-break="avoid">
+      <h3>Card 10</h3>
+      <p>Heading and body belong to one another. Without the attribute this card would be
+        walked into and split between its heading and its text at a page boundary.</p>
+    </div>
+  </div>
+
+  <iframe id="preview-frame" hidden width="100%" height="820"
+          style="border:1px solid #d8d8de;border-radius:8px;margin-top:24px"></iframe>
+
+  <script type="module" src="./shared/example.js"></script>
+</body>
+</html>

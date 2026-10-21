@@ -1,0 +1,44 @@
+{
+  "name": "html-to-pdf",
+  "version": "0.3.4",
+  "description": "Zero-setup HTML to PDF in the browser. An exact copy of an element's desktop layout (backgrounds, gradients, rounded corners, images, links, fonts) as a real vector PDF. No headless browser, no server.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build-fonts.mjs && tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test \"test/**/*.test.js\"",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "pdf",
+    "html-to-pdf",
+    "pagination",
+    "print",
+    "page-break"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/lora": "^5.3.0",
+    "@fontsource/noto-sans": "^5.3.0",
+    "typescript": "^6.0.3"
+  },
+  "files": [
+    "dist",
+    "NOTICE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "types": "./dist/index.d.ts"
+}

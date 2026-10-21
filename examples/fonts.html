@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fonts · html-to-pdf</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+        "@pdf-lib/fontkit": "https://esm.sh/@pdf-lib/fontkit@1.1.1"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./shared/example.css" />
+  <style>
+    /* Lora, SIL Open Font License — see assets/fonts/OFL.txt */
+    @font-face {
+      font-family: 'Lora';
+      src: url('./assets/fonts/Lora-Regular.ttf') format('truetype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lora';
+      src: url('./assets/fonts/Lora-Bold.ttf') format('truetype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lora';
+      src: url('./assets/fonts/Lora-Italic.ttf') format('truetype');
+      font-weight: 400; font-style: italic; font-display: swap;
+    }
+    .sans  { font-family: Helvetica, Arial, sans-serif; }
+    .serif { font-family: Georgia, "Times New Roman", serif; }
+    .mono  { font-family: ui-monospace, Menlo, monospace; }
+    .lora  { font-family: 'Lora', Georgia, serif; font-size: 16px; }
+  </style>
+</head>
+<body data-filename="fonts.pdf" data-page-size="A4">
+  <div class="toolbar">
+    <a class="back" href="./">&larr; All examples</a>
+    <div>
+      <button id="go">Download PDF</button>
+      <button id="preview">Preview PDF</button>
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <h1>Fonts</h1>
+  <p class="lede">Typefaces survive the trip. The three generic families map onto PDF's built-in
+standard 14 for free, and a real web font is embedded from the page's own
+<code>@font-face</code> rule — no configuration.</p>
+
+  <div id="content">
+    <h1>Fonts — Standard 14 and Embedded Web Fonts</h1>
+    <p>
+      Every PDF reader has Helvetica, Times and Courier built in, in four styles each. Mapping a
+      run's computed <code>font-family</code> onto the right one costs nothing: no downloads, no
+      embedded bytes. That alone covers most documents, and it is what keeps a
+      <code>code span</code> monospace instead of flattening it to the body face.
+    </p>
+
+    <h2>The three generic families</h2>
+    <p class="sans">Sans-serif text maps to Helvetica, with <strong>bold</strong> and <em>italic</em>.</p>
+    <p class="serif">Serif text maps to Times Roman, with <strong>bold</strong> and <em>italic</em>.</p>
+    <p class="mono">Monospace text maps to Courier, with <strong>bold</strong> and <em>italic</em>.</p>
+
+    <h2>A real embedded font</h2>
+    <p class="lora">
+      This paragraph is set in Lora, a web font declared with <code>@font-face</code> in this page's
+      own stylesheet. The library reads that rule, fetches the file, and embeds a subset of it, so
+      the PDF shows the same typeface the reader saw on screen — not a generic substitute.
+      <strong>Bold</strong> and <em>italic</em> are separate faces and are embedded separately.
+    </p>
+    <p class="lora">
+      Subsetting matters here: only the glyphs actually used are embedded, which is the difference
+      between a few kilobytes per face and a few hundred.
+    </p>
+
+    <h2>Mixed within one line</h2>
+    <p>
+      A single line can mix all of it — <span class="serif">serif</span>,
+      <span class="mono">mono</span>, <span class="lora">Lora</span> and <strong>bold sans</strong> —
+      with every run keeping its own face, size and colour, and all of them sitting on one shared
+      baseline.
+    </p>
+  </div>
+
+  <iframe id="preview-frame" hidden width="100%" height="820"
+          style="border:1px solid #d8d8de;border-radius:8px;margin-top:24px"></iframe>
+
+  <script type="module" src="./shared/example.js"></script>
+</body>
+</html>

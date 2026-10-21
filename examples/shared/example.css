@@ -1,0 +1,69 @@
+:root {
+  --ink: #1c1c1e;
+  --muted: #5c5c66;
+  --line: #d8d8de;
+  --accent: #2f5bd7;
+  --bg: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  max-width: 760px;
+  margin: 40px auto;
+  padding: 0 20px;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.5;
+}
+a { color: var(--accent); }
+.toolbar {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+  z-index: 2;
+}
+.toolbar .back { font-size: 14px; display: inline-block; margin-bottom: 8px; }
+button {
+  padding: 9px 16px;
+  font-size: 15px;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f6f6f8;
+  margin-right: 8px;
+}
+button:hover:not(:disabled) { background: #ececf1; }
+button:disabled { opacity: 0.5; cursor: default; }
+#status { color: var(--muted); font-size: 14px; margin-top: 10px; min-height: 20px; }
+.lede { color: var(--muted); font-size: 15px; }
+
+/* The subtree that actually gets converted. */
+#content {
+  border: 1px solid var(--line);
+  padding: 28px;
+  border-radius: 8px;
+}
+#content h1 { font-size: 22px; margin: 0 0 12px; }
+#content h2 { font-size: 17px; margin: 28px 0 8px; }
+#content h3 { font-size: 15px; margin: 20px 0 6px; }
+#content p { margin: 0 0 12px; }
+table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+td, th { border: 1px solid var(--line); padding: 6px 8px; text-align: left; font-size: 14px; }
+th { background: #f6f6f8; }
+ul, ol { margin: 12px 0; padding-left: 22px; }
+li { margin-bottom: 8px; }
+figure { margin: 16px 0; }
+figure img { display: block; max-width: 100%; }
+figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+/* Cards: not <tr>/<li>, so they opt in to atomicity explicitly. */
+.card {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.card h3 { margin-top: 0; }

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>html-to-pdf examples</title>
+  <link rel="stylesheet" href="./shared/example.css" />
+  <style>
+    .examples { list-style: none; padding: 0; margin: 24px 0 0; }
+    .examples li { margin: 0 0 12px; }
+    .examples a {
+      display: block; border: 1px solid var(--line); border-radius: 8px;
+      padding: 14px 16px; text-decoration: none; color: inherit;
+    }
+    .examples a:hover { background: #f6f6f8; }
+    .examples strong { color: var(--accent); }
+    .examples span { display: block; color: var(--muted); font-size: 14px; margin-top: 4px; }
+    code { background: #f2f2f5; padding: 1px 4px; border-radius: 3px; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <h1>html-to-pdf — examples</h1>
+  <p class="lede">
+    Each page below is an ordinary page in this tab. Nothing is hidden, screenshotted, or sent to a
+    server: clicking <em>Preview</em> or <em>Download</em> measures the <code>#content</code> subtree
+    in place, paginates it, and writes a real vector PDF. Every example reports how many boxes were
+    measured and how many pages the engine decided on.
+  </p>
+
+  <ul class="examples">
+    <li><a href="./report.html">
+      <strong>Mixed report</strong>
+      <span>Headings, wrapped paragraphs and a table — the full pipeline end to end.</span>
+    </a></li>
+    <li><a href="./long-text.html">
+      <strong>Long-form text</strong>
+      <span>Multi-page prose. Pages fill to within one line-height of the bottom; breaks land on
+        real line boundaries; headings are never orphaned above a break.</span>
+    </a></li>
+    <li><a href="./tables.html">
+      <strong>Long table</strong>
+      <span>60 rows across several pages. <code>&lt;tr&gt;</code> is atomic, so a row that does not
+        fit moves whole rather than being sliced.</span>
+    </a></li>
+    <li><a href="./lists-and-cards.html">
+      <strong>Lists and keep-together cards</strong>
+      <span><code>&lt;li&gt;</code> is atomic by tag; a plain <code>&lt;div&gt;</code> card opts in
+        with <code>data-pdf-break="avoid"</code>.</span>
+    </a></li>
+    <li><a href="./images.html">
+      <strong>Images and figures</strong>
+      <span>PNG and JPEG embedded as real PDF image objects, with captions kept beside them.</span>
+    </a></li>
+    <li><a href="./fonts.html">
+      <strong>Fonts</strong>
+      <span>Sans, serif and monospace mapped onto PDF's built-in standard 14 for free, plus a real
+        web font embedded straight from the page's own <code>@font-face</code> rule.</span>
+    </a></li>
+    <li><a href="./oversized.html">
+      <strong>Oversized content</strong>
+      <span>A box taller than a whole page: placed on a fresh page and reported as a warning,
+        never dropped silently.</span>
+    </a></li>
+  </ul>
+
+  <h2>Serving these</h2>
+  <p>
+    Native ES modules and an import map mean these must be served over HTTP, not opened as
+    <code>file://</code>. From the project root: <code>npx serve .</code>
+  </p>
+</body>
+</html>

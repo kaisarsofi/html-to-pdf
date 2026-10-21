@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Images and figures · html-to-pdf</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+        "@pdf-lib/fontkit": "https://esm.sh/@pdf-lib/fontkit@1.1.1"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./shared/example.css" />
+</head>
+<body data-filename="images.pdf" data-page-size="A4">
+  <div class="toolbar">
+    <a class="back" href="./">&larr; All examples</a>
+    <div>
+      <button id="go">Download PDF</button>
+      <button id="preview">Preview PDF</button>
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <h1>Images and figures</h1>
+  <p class="lede">Real embedded raster images (PNG and JPEG) drawn as PDF image objects, plus
+figures where the caption is kept with its picture.</p>
+
+  <div id="content">
+    <h1>Images and Figures</h1>
+    <p>
+      An image is atomic: it is never sliced across a page boundary. Below, the image bytes are
+      fetched and embedded once each — a second use of the same source hits the writer's embed
+      cache rather than re-encoding it.
+    </p>
+
+    <figure data-pdf-break="avoid">
+      <img src="./assets/chart.png" width="560" height="315" alt="Gridded gradient chart" />
+      <figcaption>Figure 1 — a PNG, embedded via embedPng. The caption is part of the same
+        atomic group, so it can never end up on a different page from its figure.</figcaption>
+    </figure>
+
+    <h2>Second format</h2>
+    <p>
+      The writer picks embedPng or embedJpg from the source's extension and response content type,
+      so both formats work without the caller declaring anything.
+    </p>
+
+    <figure data-pdf-break="avoid">
+      <img src="./assets/photo.jpg" width="420" height="280" alt="Warm radial swatch" />
+      <figcaption>Figure 2 — a JPEG, embedded via embedJpg.</figcaption>
+    </figure>
+
+    <h2>Repeat use</h2>
+    <p>The same PNG again, to exercise the cache — the output PDF still contains one copy of it.</p>
+
+    <figure data-pdf-break="avoid">
+      <img src="./assets/chart.png" width="380" height="214" alt="Gridded gradient chart, smaller" />
+      <figcaption>Figure 3 — same source as Figure 1, drawn at a different size.</figcaption>
+    </figure>
+  </div>
+
+  <iframe id="preview-frame" hidden width="100%" height="820"
+          style="border:1px solid #d8d8de;border-radius:8px;margin-top:24px"></iframe>
+
+  <script type="module" src="./shared/example.js"></script>
+</body>
+</html>

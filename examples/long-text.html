@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Long-form text · html-to-pdf</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+        "@pdf-lib/fontkit": "https://esm.sh/@pdf-lib/fontkit@1.1.1"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./shared/example.css" />
+</head>
+<body data-filename="long-text.pdf" data-page-size="A4">
+  <div class="toolbar">
+    <a class="back" href="./">&larr; All examples</a>
+    <div>
+      <button id="go">Download PDF</button>
+      <button id="preview">Preview PDF</button>
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <h1>Long-form text</h1>
+  <p class="lede">A multi-page wall of prose. The point of this one is the page joins: text
+should resume on the next page at a clean line boundary, with the previous
+page filled to within one line-height of the bottom.</p>
+
+  <div id="content">
+    <h1>Long-form Text — Line-level Pagination</h1>
+    <p>Scroll to the bottom of each generated page and look at the join. Because every visual
+      line is its own measured box, the last line that fits is the last line placed, and the
+      next page starts with the line right after it.</p>
+    <h2>Section 1</h2>
+    <p>Section 1 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 1 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 2</h2>
+    <p>Section 2 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 2 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 3</h2>
+    <p>Section 3 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 3 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 4</h2>
+    <p>Section 4 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 4 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 5</h2>
+    <p>Section 5 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 5 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 6</h2>
+    <p>Section 6 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 6 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 7</h2>
+    <p>Section 7 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 7 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 8</h2>
+    <p>Section 8 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 8 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 9</h2>
+    <p>Section 9 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 9 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 10</h2>
+    <p>Section 10 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 10 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 11</h2>
+    <p>Section 11 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 11 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 12</h2>
+    <p>Section 12 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 12 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 13</h2>
+    <p>Section 13 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 13 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+    <h2>Section 14</h2>
+    <p>Section 14 exists to make this document long enough to span several pages. Each
+      paragraph here wraps across multiple visual lines, and the analyzer turns each of those
+      lines into its own box before pagination ever sees them. That is the difference between
+      this approach and treating a paragraph as one indivisible unit: an indivisible paragraph
+      that does not fit has to move wholesale to the next page, leaving behind exactly the
+      unexplained white space this project exists to eliminate.</p>
+    <p>The second paragraph of section 14 repeats the shape of the first, so the document has a
+      steady rhythm of headings and body text. Watch what happens to a heading that lands near
+      the bottom of a page: keepWithNext pulls it down to the next page rather than orphaning it
+      above a break with none of its own text under it.</p>
+  </div>
+
+  <iframe id="preview-frame" hidden width="100%" height="820"
+          style="border:1px solid #d8d8de;border-radius:8px;margin-top:24px"></iframe>
+
+  <script type="module" src="./shared/example.js"></script>
+</body>
+</html>

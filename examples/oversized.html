@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Oversized content · html-to-pdf</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+        "@pdf-lib/fontkit": "https://esm.sh/@pdf-lib/fontkit@1.1.1"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="./shared/example.css" />
+</head>
+<body data-filename="oversized.pdf" data-page-size="A4">
+  <div class="toolbar">
+    <a class="back" href="./">&larr; All examples</a>
+    <div>
+      <button id="go">Download PDF</button>
+      <button id="preview">Preview PDF</button>
+      <label style="font-size:14px;margin-left:8px">
+        oversized:
+        <select id="oversized-mode">
+          <option value="scale" selected>scale (default)</option>
+          <option value="overflow">overflow</option>
+        </select>
+      </label>
+    </div>
+    <div id="status"></div>
+  </div>
+
+  <h1>Oversized content</h1>
+  <p class="lede">The failure mode, handled explicitly. A single atomic box taller than one whole
+page cannot be paginated — the engine places it on a fresh page and returns a
+warning rather than dropping it silently. Check the console after generating.</p>
+
+  <div id="content">
+    <h1>Oversized Content — Too Tall for Any Page</h1>
+    <p>
+      The image below is deliberately taller than the usable height of an A4 page. It is one atomic
+      box, and no page is tall enough for it, so no pagination decision can place it as measured.
+      There are only two honest answers, and which is right depends on the content — so the caller
+      picks with the <code>oversized</code> option. Switch the control above to compare them.
+    </p>
+    <h2>scale (the default)</h2>
+    <p>
+      Shrink it to fit. The engine prefers to fill the space left on the CURRENT page rather than
+      starting a fresh one, so the page before the image does not end up almost entirely blank —
+      that gap is exactly the unexplained white space this project exists to remove. The floor is
+      <code>minFill</code> (default 0.4): the engine will not shrink a box below that fraction of a
+      full page just to dodge a page break, because past that point the reader loses more from the
+      shrinking than from the gap.
+    </p>
+    <p>
+      Only boxes the analyzer marked <code>scalable</code> are eligible, which today means bare
+      images. Text is never silently resized — a document whose type size changes wherever a page
+      happened to end is worse than one with a page break in it.
+    </p>
+    <h2>overflow</h2>
+    <p>
+      Place it at full size on a fresh page and let it run past the page bottom, with a warning
+      naming the box id and both heights. Correct when you would rather see the breakage than have
+      the library quietly resize your content. Note what this costs: the page before it is left
+      almost empty, and everything past the page edge is clipped by the viewer.
+    </p>
+
+    <img src="./assets/chart.png" width="500" height="1400" alt="Deliberately oversized image" />
+
+    <h2>Content after the oversized box</h2>
+    <p>
+      Normal content resumes here. Under either mode the oversized box does not corrupt the flow —
+      everything after it paginates as usual.
+    </p>
+  </div>
+
+  <iframe id="preview-frame" hidden width="100%" height="820"
+          style="border:1px solid #d8d8de;border-radius:8px;margin-top:24px"></iframe>
+
+  <script type="module" src="./shared/example.js"></script>
+</body>
+</html>
