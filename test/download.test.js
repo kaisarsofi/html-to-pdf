@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { isIosBrowser } from "../dist/download/platform.js";
+import { toAbsoluteUrl } from "../dist/download/worker-url.js";
 
 const IPHONE =
   "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1";
@@ -33,6 +34,24 @@ test("a real Mac and Android do not count as iOS", () => {
     isIosBrowser({ userAgent: ANDROID, platform: "Linux armv8l", maxTouchPoints: 5 }),
     false,
   );
+});
+
+test("a bundler path stand-in becomes a real absolute URL", () => {
+  // Turbopack hands back an object that only holds the path.
+  const standIn = { toString: () => "/_next/static/media/download-worker.abc.js" };
+  const url = toAbsoluteUrl(standIn, "https://app.example.com/itinerary/preview");
+
+  assert.equal(url.href, "https://app.example.com/_next/static/media/download-worker.abc.js");
+  assert.equal(
+    new URL("__html-to-pdf__/42", url).href,
+    "https://app.example.com/_next/static/media/__html-to-pdf__/42",
+  );
+});
+
+test("a real URL passes through unchanged", () => {
+  const real = new URL("https://cdn.example.com/lib/download-worker.js");
+
+  assert.equal(toAbsoluteUrl(real, "https://app.example.com/").href, real.href);
 });
 
 test("the download worker ships next to the code that loads it", () => {

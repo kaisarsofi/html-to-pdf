@@ -1,4 +1,5 @@
 import { isIosBrowser } from "./platform.js";
+import { toAbsoluteUrl } from "./worker-url.js";
 
 const DOWNLOAD_SEGMENT = "__html-to-pdf__/";
 const ACTIVE_WAIT_MS = 1500;
@@ -6,7 +7,10 @@ const FRAME_REMOVE_MS = 60_000;
 
 /** The worker file ships inside the package; bundlers emit it from this exact URL pattern. */
 function workerUrl(): URL {
-  return new URL("./download-worker.js", import.meta.url);
+  return toAbsoluteUrl(
+    new URL("./download-worker.js", import.meta.url),
+    document.baseURI,
+  );
 }
 
 async function registerWorker(): Promise<ServiceWorkerRegistration | null> {
@@ -14,7 +18,7 @@ async function registerWorker(): Promise<ServiceWorkerRegistration | null> {
     return null;
 
   try {
-    return await navigator.serviceWorker.register(workerUrl());
+    return await navigator.serviceWorker.register(workerUrl().href);
   } catch {
     return null;
   }
