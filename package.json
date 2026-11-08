@@ -1,6 +1,6 @@
 {
   "name": "@kaisarsofi/html-to-pdf",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Zero-setup HTML to PDF in the browser. Turns any element into a real vector PDF that copies its desktop layout exactly \u2014 backgrounds, gradients, rounded corners, images, links and fonts \u2014 with selectable text and no page cut through a line, row or card. No headless browser, no server, no screenshots.",
   "keywords": [
     "pdf",
@@ -55,7 +55,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "node scripts/build-fonts.mjs && tsc",
+    "build": "node scripts/build-fonts.mjs && tsc && node scripts/copy-worker.mjs",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node --test \"test/**/*.test.js\"",
     "prepack": "npm run build"

@@ -4,6 +4,25 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] — 2026-11-08
+
+### Fixed
+
+- **On iPhone and iPad, `downloadPdf` saved nothing and opened Safari's PDF viewer.** Safari
+  only saves a file when the download starts from a tap, and building a PDF takes longer than a
+  tap stays valid, so the link click made after the build was treated as navigation. The
+  download now starts at the tap through a service worker that ships inside the package, and
+  the PDF is streamed into it when ready, so it is saved straight to Files. No setup is needed:
+  the worker is picked up by the bundler through `new URL('./download-worker.js', import.meta.url)`.
+  If it cannot run (not HTTPS, a strict CSP, a private tab, an in-app browser), a small
+  "Your PDF is ready" box with a Save PDF button asks for one more tap. Every other browser
+  saves exactly as before.
+
+### Added
+
+- `prepareDownloads()`: optional, registers the worker ahead of time so the first tap on a
+  fresh visit is a direct download too.
+
 ## [0.4.0] — 2026-10-21
 
 ### Changed

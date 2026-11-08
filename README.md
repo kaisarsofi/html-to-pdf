@@ -64,6 +64,9 @@ const ref = useRef<HTMLDivElement>(null);
 Nothing touches `document` at import time, so importing during SSR is safe — only the *call*
 needs a browser. See [frameworks](./docs/frameworks.md).
 
+On iPhone and iPad the PDF is saved straight to Files, not opened in a preview, with no setup
+(see [troubleshooting](./docs/troubleshooting.md#on-an-iphone-the-pdf-opens-in-a-preview-instead-of-downloading)).
+
 ## What survives the trip
 
 Selectable text in your own fonts · backgrounds, gradients, borders and rounded corners ·

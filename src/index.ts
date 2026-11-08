@@ -22,6 +22,9 @@ import { writeLayoutPdf } from "./core/layout-writer.js";
 import { computePageBreaks } from "./core/page-breaker.js";
 import { paginate } from "./core/pagination-engine.js";
 import { writePdf } from "./core/pdf-writer.js";
+import { isIosBrowser } from "./download/platform.js";
+import { saveBlob, showSavePrompt } from "./download/save-prompt.js";
+import { beginStreamedDownload } from "./download/streamed-download.js";
 import {
   resolveConfig,
   type PdfConfig,
@@ -47,6 +50,7 @@ export type {
 export type { FontSource } from "./core/font-registry.js";
 export type { ImageLoader } from "./core/image-embed.js";
 export { PAGE_SIZES } from "./config.js";
+export { prepareDownloads } from "./download/streamed-download.js";
 export { discoverWebFonts, classifyFamily } from "./core/font-registry.js";
 
 const MAX_PAGE_PT = 14400; // PDF's practical page-size limit (200 in)
@@ -302,24 +306,43 @@ export async function generatePdf(
   }
 }
 
-/** Generates a PDF and saves it in the browser. */
+/**
+ * Generates a PDF and saves it in the browser.
+ *
+ * On iPhone and iPad, Safari only saves a file when the download starts from a tap, and the PDF
+ * takes longer to build than a tap stays valid, so a plain link click afterwards would open a
+ * preview instead. There the download is started at the tap and the PDF is streamed into it
+ * when ready. If that cannot run (no service worker support, a strict CSP, a private tab), a
+ * small "Save PDF" box asks for one more tap. Every other browser saves directly.
+ */
 export async function downloadPdf(
   source: Element | string,
   filename = "document.pdf",
   config: PdfConfig = {},
 ): Promise<PdfResult> {
-  const result = await generatePdf(source, config);
+  const fileName = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+  const isIos = isIosBrowser();
+  const streamed = isIos ? await beginStreamedDownload(fileName) : null;
+
+  let result: PdfResult;
+  try {
+    result = await generatePdf(source, config);
+  } catch (error) {
+    streamed?.fail();
+    throw error;
+  }
+
+  if (streamed) {
+    streamed.finish(result.bytes);
+    return result;
+  }
 
   const blob = new Blob([result.bytes as BlobPart], {
     type: "application/pdf",
   });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
-  a.click();
-  // Revoke after the browser has had time to start the download.
-  setTimeout(() => URL.revokeObjectURL(url), 60_000);
+
+  if (isIos) showSavePrompt(blob, fileName);
+  else saveBlob(blob, fileName);
 
   return result;
 }
