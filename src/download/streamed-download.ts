@@ -45,8 +45,9 @@ function whenActive(
 }
 
 /**
- * Registers the download worker ahead of time, so the very first tap on an iPhone can start
- * a direct download too. Optional: without it that first tap shows the save button instead.
+ * Registers the download worker ahead of time, so the very first tap on an iPhone is sure to start
+ * a direct download. Optional: without it the worker is registered at that tap, which is usually
+ * fast enough, but on a slow connection that tap can show the save button instead.
  */
 export function prepareDownloads(): void {
   if (typeof navigator !== "undefined" && isIosBrowser()) void registerWorker();

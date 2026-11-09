@@ -90,6 +90,7 @@ The file is in Downloads in every case.
 Two optional things:
 
 - Call `prepareDownloads()` early (for example when the page that has the download button
-  opens). It registers the worker ahead of time, so even the very first tap on a fresh visit is
-  a direct download. Without it, that first tap shows the Save PDF box instead.
+  opens). It registers the worker ahead of time. Without it the worker is registered at the first
+  tap, which is usually fast enough to still start a direct download, but on a slow connection that
+  first tap can show the Save PDF box instead.
 - With a strict Content-Security-Policy, allow `worker-src 'self'` to get the direct download.
