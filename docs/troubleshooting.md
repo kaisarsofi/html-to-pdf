@@ -52,3 +52,45 @@ client component. See [frameworks.md](./frameworks.md).
 ## Buttons and toolbars appear in the PDF
 
 Mark them `data-pdf-hide`.
+
+## On an iPhone the PDF opens in a preview instead of downloading
+
+Safari on iPhone and iPad only saves a file when the download starts from a tap, and a PDF
+takes longer to build than a tap stays valid. A plain link click after the wait opens Safari's
+PDF viewer instead.
+
+`downloadPdf` handles this for you, with no setup. On iOS it starts the download at the tap
+through a small service worker that ships inside the package, then streams the PDF into it when
+it is ready, so the file is saved straight to Files. Your bundler (Next.js, Vite, webpack 5)
+picks the worker up on its own, through the standard `new URL('./worker.js', import.meta.url)`
+pattern.
+
+If the worker cannot run (a page that is not HTTPS, a strict Content-Security-Policy, a private
+tab, an in-app browser such as Instagram or WhatsApp), a small "Your PDF is ready" box with a
+**Save PDF** button appears, and that second tap saves the file. Nothing for you to build.
+
+What happens once the file is saved is up to you, with `download.after`:
+
+```ts
+await downloadPdf(el, 'quote.pdf', { download: { after: 'dialog' } });  // default
+await downloadPdf(el, 'quote.pdf', { download: { after: 'preview' } });
+await downloadPdf(el, 'quote.pdf', { download: { after: 'none' } });
+```
+
+- `'dialog'` (default): a small "Your PDF is ready" box with a **View PDF** button that opens the PDF
+  in a new tab.
+- `'preview'`: goes straight to the PDF in the current tab. The back button returns to your page.
+  Tap the system "Download" prompt right away, because leaving the page before it is confirmed
+  cancels the download. (A new tab cannot be opened here: the PDF is built long after the tap, so the
+  browser would block it.)
+- `'none'`: nothing more.
+
+The file is in Downloads in every case.
+
+Two optional things:
+
+- Call `prepareDownloads()` early (for example when the page that has the download button
+  opens). It registers the worker ahead of time. Without it the worker is registered at the first
+  tap, which is usually fast enough to still start a direct download, but on a slow connection that
+  first tap can show the Save PDF box instead.
+- With a strict Content-Security-Policy, allow `worker-src 'self'` to get the direct download.
