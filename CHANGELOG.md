@@ -8,12 +8,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- **A "View PDF" button after a direct download on iPhone and iPad.** Once the PDF has been
-  streamed into the download, a small "Your PDF is ready" box offers to open it in a new tab,
-  so the user does not have to open Downloads. The file is saved either way. Turn it off with
-  `download: { viewPrompt: false }`. A preview tab cannot be opened at the same moment as the
-  download: it would cover the system "Do you want to download?" prompt, and nothing would be
-  saved.
+- **`download.after`: choose what happens once the file is saved on iPhone and iPad.** `'dialog'`
+  (default) shows a small "Your PDF is ready" box with a View PDF button that opens the PDF in a
+  new tab, so the user does not have to open Downloads. `'preview'` goes straight to the PDF in
+  the current tab. `'none'` does nothing. The file is saved in every case. A preview tab cannot be
+  opened at the same moment as the download: it would cover the system "Do you want to download?"
+  prompt, and nothing would be saved.
 
 ## [0.4.1] — 2026-11-08
 

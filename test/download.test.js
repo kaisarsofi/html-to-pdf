@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { isIosBrowser } from "../dist/download/platform.js";
+import { resolveAfterDownload } from "../dist/download/after-download.js";
 import { toAbsoluteUrl } from "../dist/download/worker-url.js";
 
 const IPHONE =
@@ -64,4 +65,12 @@ test("the download worker ships next to the code that loads it", () => {
   assert.ok(
     fs.existsSync(new URL("../dist/download/download-worker.js", import.meta.url)),
   );
+});
+
+test("after-download defaults to the dialog and accepts the other two choices", () => {
+  assert.equal(resolveAfterDownload(undefined), "dialog");
+  assert.equal(resolveAfterDownload("dialog"), "dialog");
+  assert.equal(resolveAfterDownload("preview"), "preview");
+  assert.equal(resolveAfterDownload("none"), "none");
+  assert.equal(resolveAfterDownload("anything else"), "dialog");
 });

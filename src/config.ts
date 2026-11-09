@@ -96,11 +96,15 @@ export type FlowConfig = {
 
 export type DownloadConfig = {
   /**
-   * After a download on iPhone and iPad, show a small "Your PDF is ready" box with a View PDF button
-   * that opens the PDF in a new tab (the file is in Downloads either way). Browsers that save a file
-   * on their own are not affected. Default true.
+   * What happens on iPhone and iPad once `downloadPdf` has saved the file (browsers that save on their
+   * own are not affected). The file is in Downloads either way.
+   * - 'dialog' (default): a small "Your PDF is ready" box with a View PDF button that opens the PDF in a
+   *   new tab.
+   * - 'preview': go straight to the PDF in the current tab; the back button returns to your page. Tap the
+   *   system "Download" prompt right away: leaving the page before it is confirmed cancels the download.
+   * - 'none': do nothing.
    */
-  viewPrompt?: boolean;
+  after?: "dialog" | "preview" | "none";
 };
 
 export type PdfConfig = {
