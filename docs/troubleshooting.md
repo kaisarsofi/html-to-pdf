@@ -69,7 +69,7 @@ If the worker cannot run (a page that is not HTTPS, a strict Content-Security-Po
 tab, an in-app browser such as Instagram or WhatsApp), a small "Your PDF is ready" box with a
 **Save PDF** button appears, and that second tap saves the file. Nothing for you to build.
 
-What happens once the file is saved is up to you, with `download.after`:
+For direct downloads, use `download.after` to choose what the page does after sending the PDF to the download worker.
 
 ```ts
 await downloadPdf(el, 'quote.pdf', { download: { after: 'dialog' } });  // default
@@ -85,7 +85,7 @@ await downloadPdf(el, 'quote.pdf', { download: { after: 'none' } });
   browser would block it.)
 - `'none'`: nothing more.
 
-The file is in Downloads in every case.
+After you confirm the download and it finishes, the file appears in Downloads.
 
 Two optional things:
 

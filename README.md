@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./docs/media/hero.webp" width="800" alt="Step by step: one line of code, a click on Download PDF, then a saved two-page A4 PDF with selectable text." />
+<img src="https://raw.githubusercontent.com/kaisarsofi/html-to-pdf/main/docs/media/hero.webp" width="800" alt="Step by step: one line of code, a click on Download PDF, then a saved two-page A4 PDF with selectable text." />
 
 <h1>@kaisarsofi/html-to-pdf</h1>
 
@@ -40,7 +40,7 @@ npm install @kaisarsofi/html-to-pdf
 ## Page modes
 
 <div align="center">
-<img src="./docs/media/modes.webp" width="800" alt="The same invoice as two A4 pages and as one continuous page, side by side." />
+<img src="https://raw.githubusercontent.com/kaisarsofi/html-to-pdf/main/docs/media/modes.webp" width="800" alt="The same invoice as two A4 pages and as one continuous page, side by side." />
 </div>
 
 ```ts
@@ -62,10 +62,12 @@ const ref = useRef<HTMLDivElement>(null);
 ```
 
 Nothing touches `document` at import time, so importing during SSR is safe — only the *call*
-needs a browser. See [frameworks](./docs/frameworks.md).
+needs a browser. See [frameworks](https://github.com/kaisarsofi/html-to-pdf/blob/main/docs/frameworks.md).
 
-On iPhone and iPad the PDF is saved straight to Files, not opened in a preview, with no setup
-(see [troubleshooting](./docs/troubleshooting.md#on-an-iphone-the-pdf-opens-in-a-preview-instead-of-downloading)).
+On iPhone and iPad, `downloadPdf` uses a bundled service worker to save the PDF to Downloads.
+If the worker is unavailable, it shows a **Save PDF** button. After a direct download,
+`download.after` controls whether to offer a **View PDF** button, open the PDF in the
+current tab, or skip the follow-up. See [iOS download troubleshooting](https://github.com/kaisarsofi/html-to-pdf/blob/main/docs/troubleshooting.md#on-an-iphone-the-pdf-opens-in-a-preview-instead-of-downloading).
 
 ## What survives the trip
 
@@ -75,7 +77,7 @@ and `box-shadow` · `₹` and friends without installing a font.
 
 Anything that could only be approximated comes back in `notes`, and anything that changed the
 output — a font that could not be embedded, an image the browser blocked — comes back in
-`warnings`. It never throws at you:
+`warnings`.
 
 ```ts
 const { bytes, pageCount, warnings, notes } = await generatePdf('#invoice');
@@ -85,12 +87,12 @@ const { bytes, pageCount, warnings, notes } = await generatePdf('#invoice');
 
 | | |
 |---|---|
-| [Configuration](./docs/configuration.md) | Every option and its default |
-| [Frameworks](./docs/frameworks.md) | React, Next.js (and `next/font`), Vue, plain HTML |
-| [Fonts](./docs/fonts.md) | Why WOFF2 and variable fonts cannot be embedded |
-| [Images](./docs/images.md) | The cross-origin problem, and both ways out |
-| [How it works](./docs/how-it-works.md) | The four passes, and why there is no Node build |
-| [Troubleshooting](./docs/troubleshooting.md) | Failure modes, in the order people hit them |
+| [Configuration](https://github.com/kaisarsofi/html-to-pdf/blob/main/docs/configuration.md) | Every option and its default |
+| [Frameworks](https://github.com/kaisarsofi/html-to-pdf/blob/main/docs/frameworks.md) | React, Next.js (and `next/font`), Vue, plain HTML |
+| [Fonts](https://github.com/kaisarsofi/html-to-pdf/blob/main/docs/fonts.md) | Why WOFF2 and variable fonts cannot be embedded |
+| [Images](https://github.com/kaisarsofi/html-to-pdf/blob/main/docs/images.md) | The cross-origin problem, and both ways out |
+| [How it works](https://github.com/kaisarsofi/html-to-pdf/blob/main/docs/how-it-works.md) | The four passes, and why there is no Node build |
+| [Troubleshooting](https://github.com/kaisarsofi/html-to-pdf/blob/main/docs/troubleshooting.md) | Failure modes, in the order people hit them |
 
 Run the examples with `npm run build && python3 scripts/serve.py`, then open
 <http://localhost:4173/examples/>.
@@ -99,8 +101,7 @@ Run the examples with `npm run build && python3 scripts/serve.py`, then open
 
 Browser only — it measures a real layout, so there is no Node build. Inset shadows,
 `clip-path: url()`, `calc()` / `var()` shapes, `backdrop-filter` and `::before` / `::after`
-content are skipped; radial and conic gradients are approximated. ~840 kB packed, mostly the
-bundled Inter and Noto Sans, both fetched lazily and only when a PDF needs them.
+content are skipped; radial and conic gradients are approximated. The npm package is about 1.6 MB compressed. Bundled Inter and Noto Sans fonts load only when a PDF needs them.
 
 ## License
 
