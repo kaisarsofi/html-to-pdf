@@ -69,6 +69,10 @@ If the worker cannot run (a page that is not HTTPS, a strict Content-Security-Po
 tab, an in-app browser such as Instagram or WhatsApp), a small "Your PDF is ready" box with a
 **Save PDF** button appears, and that second tap saves the file. Nothing for you to build.
 
+After the download starts, a small "Your PDF is ready" box with a **View PDF** button opens the
+file in a new tab, so nobody has to dig through Downloads to open it. The file is in Downloads
+either way. Turn the box off with `downloadPdf(el, 'x.pdf', { download: { viewPrompt: false } })`.
+
 Two optional things:
 
 - Call `prepareDownloads()` early (for example when the page that has the download button

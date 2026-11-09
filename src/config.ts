@@ -94,6 +94,15 @@ export type FlowConfig = {
   minFill?: number;
 };
 
+export type DownloadConfig = {
+  /**
+   * After a download on iPhone and iPad, show a small "Your PDF is ready" box with a View PDF button
+   * that opens the PDF in a new tab (the file is in Downloads either way). Browsers that save a file
+   * on their own are not affected. Default true.
+   */
+  viewPrompt?: boolean;
+};
+
 export type PdfConfig = {
   /**
    * 'preserve' (default): an exact copy of the on-screen layout, with backgrounds, gradients, borders,
@@ -127,6 +136,8 @@ export type PdfConfig = {
   flow?: FlowConfig;
   /** Print warnings (blocked images, missing fonts) to the console. Default true. */
   logWarnings?: boolean;
+  /** What happens after `downloadPdf` saves the file. */
+  download?: DownloadConfig;
 };
 
 export type PdfResult = {

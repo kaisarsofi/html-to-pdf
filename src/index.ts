@@ -23,7 +23,11 @@ import { computePageBreaks } from "./core/page-breaker.js";
 import { paginate } from "./core/pagination-engine.js";
 import { writePdf } from "./core/pdf-writer.js";
 import { isIosBrowser } from "./download/platform.js";
-import { saveBlob, showSavePrompt } from "./download/save-prompt.js";
+import {
+  saveBlob,
+  showSavePrompt,
+  showViewPrompt,
+} from "./download/save-prompt.js";
 import { beginStreamedDownload } from "./download/streamed-download.js";
 import {
   resolveConfig,
@@ -38,6 +42,7 @@ import {
 } from "./render/desktop-frame.js";
 
 export type {
+  DownloadConfig,
   FlowConfig,
   ImagesConfig,
   PageConfig,
@@ -312,8 +317,9 @@ export async function generatePdf(
  * On iPhone and iPad, Safari only saves a file when the download starts from a tap, and the PDF
  * takes longer to build than a tap stays valid, so a plain link click afterwards would open a
  * preview instead. There the download is started at the tap and the PDF is streamed into it
- * when ready. If that cannot run (no service worker support, a strict CSP, a private tab), a
- * small "Save PDF" box asks for one more tap. Every other browser saves directly.
+ * when ready, then a small "View PDF" box offers to open it (`download.viewPrompt`). If that
+ * cannot run (no service worker support, a strict CSP, a private tab), a small "Save PDF" box asks
+ * for one more tap. Every other browser saves directly.
  */
 export async function downloadPdf(
   source: Element | string,
@@ -332,14 +338,15 @@ export async function downloadPdf(
     throw error;
   }
 
-  if (streamed) {
-    streamed.finish(result.bytes);
-    return result;
-  }
-
   const blob = new Blob([result.bytes as BlobPart], {
     type: "application/pdf",
   });
+
+  if (streamed) {
+    streamed.finish(result.bytes);
+    if (config.download?.viewPrompt !== false) showViewPrompt(blob, fileName);
+    return result;
+  }
 
   if (isIos) showSavePrompt(blob, fileName);
   else saveBlob(blob, fileName);

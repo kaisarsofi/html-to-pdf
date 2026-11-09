@@ -4,6 +4,17 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] — 2026-11-09
+
+### Added
+
+- **A "View PDF" button after a direct download on iPhone and iPad.** Once the PDF has been
+  streamed into the download, a small "Your PDF is ready" box offers to open it in a new tab,
+  so the user does not have to open Downloads. The file is saved either way. Turn it off with
+  `download: { viewPrompt: false }`. A preview tab cannot be opened at the same moment as the
+  download: it would cover the system "Do you want to download?" prompt, and nothing would be
+  saved.
+
 ## [0.4.1] — 2026-11-08
 
 ### Fixed
