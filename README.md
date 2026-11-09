@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./docs/media/hero.gif" width="720" alt="Code calling downloadPdf on the left; the resulting A4 PDF pages on the right." />
+<img src="./docs/media/hero.webp" width="800" alt="Step by step: one line of code, a click on Download PDF, then a saved two-page A4 PDF with selectable text." />
 
 <h1>@kaisarsofi/html-to-pdf</h1>
 
@@ -40,7 +40,7 @@ npm install @kaisarsofi/html-to-pdf
 ## Page modes
 
 <div align="center">
-<img src="./docs/media/modes.gif" width="760" alt="The same statement rendered as two A4 pages and as one continuous page, side by side." />
+<img src="./docs/media/modes.webp" width="800" alt="The same invoice as two A4 pages and as one continuous page, side by side." />
 </div>
 
 ```ts

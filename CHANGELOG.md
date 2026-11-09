@@ -15,6 +15,11 @@ All notable changes to this project are documented here. The format follows
   opened at the same moment as the download: it would cover the system "Do you want to download?"
   prompt, and nothing would be saved.
 
+### Changed
+
+- The README demos are now clear step-by-step animated WebP (code, click, saved PDF) instead of GIFs:
+  sharper text and about 80% smaller.
+
 ## [0.4.1] — 2026-11-08
 
 ### Fixed
