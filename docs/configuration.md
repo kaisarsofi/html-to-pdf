@@ -99,3 +99,11 @@ const { bytes, pageCount, warnings, notes } = await generatePdf('#quote');
 | `pageCount` | Pages written. |
 | `warnings` | Things that changed the output: a font that could not be embedded, images the browser blocked. Never thrown — always returned. |
 | `notes` | CSS that was approximated or skipped, so you are never silently given a wrong-looking PDF. |
+
+## Downloads
+
+| Option | Default | |
+|---|---|---|
+| `download.after` | `'dialog'` | Applies to direct downloads on iPhone and iPad. `'dialog'` offers a View PDF button, `'preview'` opens the PDF in the current tab, and `'none'` skips the follow-up. |
+
+See [iOS download troubleshooting](./troubleshooting.md#on-an-iphone-the-pdf-opens-in-a-preview-instead-of-downloading) for the Save PDF fallback and optional worker preparation.

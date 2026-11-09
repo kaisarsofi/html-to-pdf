@@ -8,36 +8,21 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- **`download.after`: choose what happens once the file is saved on iPhone and iPad.** `'dialog'`
-  (default) shows a small "Your PDF is ready" box with a View PDF button that opens the PDF in a
-  new tab, so the user does not have to open Downloads. `'preview'` goes straight to the PDF in
-  the current tab. `'none'` does nothing. The file is saved in every case. A preview tab cannot be
-  opened at the same moment as the download: it would cover the system "Do you want to download?"
-  prompt, and nothing would be saved.
-
-### Changed
-
-- The README demos are now clear step-by-step animated WebP (code, click, saved PDF) instead of GIFs:
-  sharper text and about 80% smaller.
-
-## [0.4.1] — 2026-11-08
+- `prepareDownloads()` optionally registers the download worker ahead of the first tap.
+- `download.after` controls what follows a direct download on iPhone and iPad. Use
+  `'dialog'` (default) to offer a View PDF button, `'preview'` to open the PDF in the
+  current tab, or `'none'` to skip the follow-up.
 
 ### Fixed
 
-- **On iPhone and iPad, `downloadPdf` saved nothing and opened Safari's PDF viewer.** Safari
-  only saves a file when the download starts from a tap, and building a PDF takes longer than a
-  tap stays valid, so the link click made after the build was treated as navigation. The
-  download now starts at the tap through a service worker that ships inside the package, and
-  the PDF is streamed into it when ready, so it is saved straight to Files. No setup is needed:
-  the worker is picked up by the bundler through `new URL('./download-worker.js', import.meta.url)`.
-  If it cannot run (not HTTPS, a strict CSP, a private tab, an in-app browser), a small
-  "Your PDF is ready" box with a Save PDF button asks for one more tap. Every other browser
-  saves exactly as before.
+- `downloadPdf` starts iPhone and iPad downloads from the user's tap and streams the PDF
+  through the bundled service worker as soon as the file is ready. If the worker is
+  unavailable, a Save PDF button gives the user a second tap to save the file.
 
-### Added
+### Changed
 
-- `prepareDownloads()`: optional, registers the worker ahead of time so the first tap on a
-  fresh visit is a direct download too.
+- The README now shows step-by-step animated WebP demos for downloading PDFs and comparing
+  page modes.
 
 ## [0.4.0] — 2026-10-21
 
@@ -137,5 +122,6 @@ land where nothing is crossing them.
 - 71 tests covering layout extraction, page breaking, pagination, colour parsing, SVG paths
   and config resolution, run on Node 18, 20 and 22.
 
+[0.4.2]: https://github.com/kaisarsofi/html-to-pdf/releases/tag/v0.4.2
 [0.4.0]: https://github.com/kaisarsofi/html-to-pdf/releases/tag/v0.4.0
 [0.3.4]: https://github.com/kaisarsofi/html-to-pdf/releases/tag/v0.3.4
